@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load cache %}
+{% load thumbnail %}
+{% block title %}{{title}}{% endblock %}
+{% block content %}
+  {% include 'includes/switcher.html' with follow=True %}
+  {% if page_obj %}
+    <h1>Последние обновления</h1>
+  {% else %}
+    <h1>У вас пока нет подписок :(</h1>
+    <p>Можете выбрать тех авторов, которые вам понравятся</p>
+  {% endif %}
+  {% for post in page_obj %}
+
+    <ul>
+      <li>
+        Автор:
+        {% if post.author.get_full_name %}
+          {{ post.author.get_full_name }}
+        {% else %}
+          {{ post.author }}
+        {% endif %}
+        <a href="{% url 'posts:profile' post.author %}">
+          все посты пользователя
+        </a>
+      </li>
+      <li>
+        Дата публикации: {{ post.pub_date|date:"d E Y" }}
+      </li>
+    </ul>
+    <div class="text-left">
+      {% thumbnail post.image "100x100"  upscale=True as im %}
+        <img class="img-fluid" src="{{ im.url }}">
+      {% endthumbnail %}
+    </div>
+    <p>{{ post.text }}</p>
+    {% if post.group %}
+      <a href="{% url 'posts:group_posts' post.group.slug %}">все записи группы</a>
+    {% endif %}
+    {% if not forloop.last %}<hr>{% endif %}
+
+  {% endfor %}
+
+  {% include 'includes/paginator.html' %}
+
+{% endblock %}
