@@ -41,7 +41,7 @@ class PostURLTest(TestCase):
             f'/group/{self.group.slug}/': HTTPStatus.OK,
             f'/profile/{self.user.username}/': HTTPStatus.OK,
             f'/posts/{self.post.id}/': HTTPStatus.OK,
-            # '/unexisting_page/': HTTPStatus.OK,
+            '/unexisting_page/': HTTPStatus.NOT_FOUND,
         }
         for address, status in url_exists_location.items():
             with self.subTest(address=address):
@@ -87,14 +87,3 @@ class PostURLTest(TestCase):
             f'/posts/{self.post.id}/edit/'
         )
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-
-    def test_not_found(self):
-        """test."""
-        response = self.client.get(reverse('posts:index'))
-        print(response.status_code)
-        response = self.client.get('/tets/')
-        self.assertEqual(
-            response.status_code,
-            404,
-            'Страница unexisting_page/ не доступна по этому адресу'
-        )
