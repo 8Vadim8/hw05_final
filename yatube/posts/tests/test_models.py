@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from .constant_list import (GROUP_TITLE, GROUP_SLUG, GROUP_DESCRIPTION,
-                            USERNAME, POST_TEXT)
 from ..models import Group, Post
-
+from .constant_list import (GROUP_DESCRIPTION, GROUP_SLUG, GROUP_TITLE,
+                            POST_TEXT, USERNAME)
 
 User = get_user_model()
 

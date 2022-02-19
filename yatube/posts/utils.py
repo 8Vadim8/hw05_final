@@ -1,7 +1,7 @@
 from typing import Any
 
-from django.core.paginator import Page, Paginator
 from django.conf import settings
+from django.core.paginator import Page, Paginator
 
 
 def get_paginator_page(request: Any, query_set: Any) -> Page:

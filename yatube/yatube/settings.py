@@ -147,7 +147,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 THUMBNAIL_PADDING = True
-THUMBNAIL_PADDING_COLOR = '#ff66ff'
+THUMBNAIL_PADDING_COLOR = '#ffffff'
 
 CACHES = {
     'default': {

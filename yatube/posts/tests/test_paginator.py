@@ -1,12 +1,10 @@
-from django.contrib.auth import get_user_model
-
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .constant_list import (GROUP_TITLE, GROUP_SLUG, GROUP_DESCRIPTION,
-                            USERNAME)
 from ..models import Group, Post
+from .constant_list import GROUP_DESCRIPTION, GROUP_SLUG, GROUP_TITLE, USERNAME
 
 User = get_user_model()
 posts_list = []

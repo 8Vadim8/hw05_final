@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from .constant_list import (GROUP_TITLE, GROUP_SLUG, GROUP_DESCRIPTION,
-                            USERNAME, POST_TEXT, ANOTHER_USER, NEW_USER,
-                            NEW_POST_TEXT)
-from ..models import Group, Post, Follow
+from ..models import Follow, Group, Post
+from .constant_list import (ANOTHER_USER, GROUP_DESCRIPTION, GROUP_SLUG,
+                            GROUP_TITLE, NEW_POST_TEXT, NEW_USER, POST_TEXT,
+                            USERNAME)
 
 User = get_user_model()
 
@@ -36,7 +36,7 @@ class FollowingTest(TestCase):
     def test_follow(self):
         """Проверка подписки и отписки от автора."""
         follow_count = Follow.objects.count()
-        response = self.authorized_client.get(
+        self.authorized_client.get(
             reverse(
                 'posts:profile_follow',
                 kwargs={'username': self.author.username}
@@ -45,7 +45,7 @@ class FollowingTest(TestCase):
         )
         self.assertEqual(Follow.objects.count(), follow_count + 1,
                          'Пользователь не подписался')
-        response = self.authorized_client.get(
+        self.authorized_client.get(
             reverse(
                 'posts:profile_unfollow',
                 kwargs={'username': self.author.username}

@@ -4,13 +4,13 @@ import tempfile
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, Client, override_settings
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from .constant_list import (GROUP_TITLE, GROUP_SLUG, GROUP_DESCRIPTION,
-                            USERNAME, POST_TEXT, ANOTHER_USER, NEW_POST_TEXT,
-                            COMMENT)
-from ..models import Group, Post, Comment
+from ..models import Comment, Group, Post
+from .constant_list import (ANOTHER_USER, COMMENT, GROUP_DESCRIPTION,
+                            GROUP_SLUG, GROUP_TITLE, NEW_POST_TEXT, POST_TEXT,
+                            USERNAME)
 
 User = get_user_model()
 
