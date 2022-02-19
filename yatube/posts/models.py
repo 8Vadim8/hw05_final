@@ -37,6 +37,9 @@ class Post(models.Model):
     def __str__(self):
         return self.text[:15]
 
+    class Meta:
+        ordering = ["-pub_date"]
+
 
 class Group(models.Model):
     title = models.CharField(
@@ -94,3 +97,11 @@ class Follow(models.Model):
         related_name='following',
         verbose_name='Автор',
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='user_author'
+            )
+        ]

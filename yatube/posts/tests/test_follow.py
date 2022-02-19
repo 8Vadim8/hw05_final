@@ -33,8 +33,8 @@ class FollowingTest(TestCase):
         self.authorized_client.force_login(self.user)
         self.new_authorized_client = Client()
 
-    def test_follow(self):
-        """Проверка подписки и отписки от автора."""
+    def test_following(self):
+        """Проверка подписки на автора."""
         follow_count = Follow.objects.count()
         self.authorized_client.get(
             reverse(
@@ -45,6 +45,19 @@ class FollowingTest(TestCase):
         )
         self.assertEqual(Follow.objects.count(), follow_count + 1,
                          'Пользователь не подписался')
+        id_author = self.user.follower.get(id=follow_count + 1).author_id
+        self.assertEqual(id_author, self.author.id, 'Авторы не совпадают')
+
+    def test_unfollowing(self):
+        """Проверяем отписку пользователя от автора"""
+        self.authorized_client.get(
+            reverse(
+                'posts:profile_follow',
+                kwargs={'username': self.author.username}
+            ),
+            follow=True
+        )
+        follow_count = Follow.objects.count()
         self.authorized_client.get(
             reverse(
                 'posts:profile_unfollow',
@@ -52,15 +65,17 @@ class FollowingTest(TestCase):
             ),
             follow=True
         )
-        self.assertEqual(Follow.objects.count(), follow_count,
+        self.assertEqual(Follow.objects.count(), follow_count - 1,
                          'Пользователь не отписался')
+        follow = self.user.follower.all()
+        self.assertNotIn(self.author.id, follow, 'Пользователь не отписался')
 
     def test_update(self):
         """
         Проверка, что новый пост появляется в ленте подписчика
         и не появляется в ленте неподписчика
         """
-        response = self.authorized_client.get(
+        self.authorized_client.get(
             reverse(
                 'posts:profile_follow',
                 kwargs={'username': self.author.username}

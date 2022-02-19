@@ -10,7 +10,7 @@ from .utils import get_paginator_page
 def index(request):
     template = 'posts/index.html'
     title = 'Последние обновления на сайте'
-    post_list = Post.objects.all().order_by('-pub_date')
+    post_list = Post.objects.select_related()
     page_obj = get_paginator_page(request, post_list)
     context = {
         'title': title,
@@ -24,9 +24,7 @@ def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     title = "Записи сообщества: " + group.__str__()
 
-    post_list = Post.objects.filter(
-        group=group
-    ).order_by('-pub_date')
+    post_list = Post.objects.filter(group=group)
     if not post_list.exists():
         raise Http404()
     page_obj = get_paginator_page(request, post_list)
@@ -47,7 +45,7 @@ def profile(request, username):
         and Follow.objects.filter(author=user, user=request.user).exists()
     )
 
-    post_list = user.posts.all().order_by('-pub_date')
+    post_list = user.posts.all()
     title = f'Профайл пользователя {user}'
 
     count = post_list.count()
@@ -133,7 +131,7 @@ def follow_index(request):
     title = 'Последние обновления'
     user = request.user
     authors = user.follower.all().values('author')
-    post_list = Post.objects.filter(author__in=authors).order_by('-pub_date')
+    post_list = Post.objects.filter(author__in=authors)
     page_obj = get_paginator_page(request, post_list)
     context = {
         'title': title,
@@ -148,7 +146,7 @@ def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
     following = Follow.objects.filter(user=user, author=author)
     if request.user != author and not following.exists():
-        Follow.objects.create(user=request.user, author=author)
+        Follow.objects.get_or_create(user=request.user, author=author)
     return redirect('posts:profile', username)
 
 

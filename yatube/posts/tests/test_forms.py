@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from ..models import Comment, Group, Post
+from ..models import Group, Post
 from .constant_list import (ANOTHER_USER, COMMENT, GROUP_DESCRIPTION,
                             GROUP_SLUG, GROUP_TITLE, NEW_POST_TEXT, POST_TEXT,
                             USERNAME)
@@ -183,9 +183,17 @@ class PostFormTests(TestCase):
             response,
             reverse('posts:post_detail', kwargs={'post_id': self.post.id})
         )
-        comment = Comment.objects.first()
-        self.assertEqual(comment.text, COMMENT)
         response = self.authorized_client.get(
             reverse('posts:post_detail', kwargs={'post_id': self.post.id})
         )
-        self.assertIn(comment, response.context.get('comments'))
+        post = response.context['post']
+        comment = post.comments.last()
+        self.assertEqual(
+            comment.post.id,
+            self.post.id,
+            f'комментарий не относится к пост с id {self.post.id}'
+        )
+        self.assertEqual(comment.text, form_data['text'],
+                         'текст комментария не совпадает с заданым')
+        self.assertEqual(comment.author, self.user,
+                         'автор комментария не совпадает')

@@ -37,11 +37,11 @@ def post_with_group(user, group):
 @pytest.fixture
 def few_posts_with_group(mixer, user, group):
     """Return one record with the same author and group."""
-    posts = mixer.cycle(20).blend(Post, author=user, group=group)
+    posts = mixer.cycle(20).blend(Post, author=user, group=group, image=None)
     return posts[0]
 
 
 @pytest.fixture
 def another_few_posts_with_group_with_follower(mixer, user, another_user, group):
     mixer.blend('posts.Follow', user=user, author=another_user)
-    mixer.cycle(20).blend(Post, author=another_user, group=group)
+    mixer.cycle(20).blend(Post, author=another_user, group=group, image=None)
