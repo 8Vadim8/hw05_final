@@ -1,6 +1,6 @@
 # Проект «Yatube»
-Yatube — это социальная сеть для блогеров с возможностью публикации личных дневников
-с системами комментирования и подписок.
+Yatube — это социальная сеть для блоггеров с возможностью публикации личных дневников
+и возможностью оставлять комментарии и подписываться на авторов.
 
 ## Приложение имеет следующий функционал:
 - публикация поста с возможностью прикрепить к нему изображение
@@ -29,7 +29,9 @@ pip install -r requirements.txt
 ```
 Перейти в каталол проекта:
 
-`cd yatube`
+```
+cd yatube
+```
 
 Cоздать в ней файл .env и прописать SECRET_KEY
 ```
@@ -39,12 +41,18 @@ echo "SECRET_KEY=YourSecretKey" > .env
 
 Выполнить миграции:
 
-`python manage.py migrate`
+```
+python manage.py migrate
+```
 
 Создаем суперпользователя:
 
-`python manage.py createsuperuser`
+```
+python manage.py createsuperuser
+```
 
 Запустить проект:
 
-`python manage.py runserver`
+```
+python manage.py runserver
+```
